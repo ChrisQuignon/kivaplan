@@ -13,6 +13,7 @@
     (at ?x ?y)
     ;"Y is at X"
     (picked ?prdct - product)
+    (loaded ?rbt - robot)
     )
 
   (:action drive_to
@@ -29,20 +30,20 @@
 
   (:action pick
     :parameters (?pckr - picker ?shlf - shelf ?prdct - product ?loc - location ?rbt - robot)
-    :precondition (and (at ?shlf ?prdct) (at ?rbt ?shlf) (at ?loc ?rbt))
+    :precondition (and (at ?shlf ?prdct) (at ?rbt ?shlf) (at ?loc ?rbt) (at ?loc ?pckr))
     :effect (and (picked ?prdct) (not (at ?shlf ?prdct)))
     )
 
   (:action unload
     :parameters (?loc - location ?shlf - shelf ?rbt - robot)
-    :precondition (and (at ?rbt ?shlf) (at ?loc ?rbt))
-    :effect (and (not (at ?rbt ?shlf)) (at ?loc ?shlf))
+    :precondition (and (at ?rbt ?shlf) (at ?loc ?rbt) (loaded ?rbt))
+    :effect (and (not (at ?rbt ?shlf)) (at ?loc ?shlf) (not (loaded ?rbt)))
     )
 
   (:action load
     :parameters (?rbt - robot  ?shlf - shelf ?loc - location)
-    :precondition (and (at ?loc ?rbt) (at ?loc ?shlf))
-    :effect ( and (not (at ?loc ?shlf)) (at ?rbt ?shlf))
+    :precondition (and (at ?loc ?rbt) (at ?loc ?shlf) (not (loaded ?rbt)))
+    :effect ( and (not (at ?loc ?shlf)) (at ?rbt ?shlf) (loaded ?rbt))
     )
 
   ;(:order
