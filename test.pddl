@@ -5,12 +5,13 @@
     rbt - robot
     loc1  loc2 loc3 pckrloc - location
     pckr - picker
-    prdct - product)	
-  (:init(at rbt loc1) (at loc2 prdct) (at pckr pckrloc))
+    prdct - product
+    shlf - shelf)	
+  (:init(at loc1 rbt) (at loc2 shlf) (at shlf prdct) (at pckrloc pckr))
   (:goal 
     (and
     (picked prdct) 
-    (at rbt pckrloc)
+    (at loc2 rbt)
     )
     )
 )

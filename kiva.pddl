@@ -1,46 +1,48 @@
 (define
   (domain kiva)
   
-  (:requirements :typing)
+  (:requirements
+    :typing
+    ;:fluents ; there is no planing using fluents(?)
+    )
   
-  (:types robot shelf product location 
-  picker
-  )
-  ;((:constants )
+  (:types robot shelf product location picker)
+  ;(:constants)
   
   (:predicates
     (at ?x ?y)
+    ;"Y is at X"
     (picked ?prdct - product)
     )
 
   (:action drive_to
     :parameters (?rbt - robot ?from - location ?goal - location)
-    :precondition (at ?rbt ?from)
-    :effect ( and (at ?rbt ?goal) (not (at ?rbt ?from)))
+    :precondition (at ?from ?rbt)
+    :effect ( and (at ?goal ?rbt) (not (at ?from ?rbt)))
     )
 
-  (:action deliver
-    :parameters (?rbt - robot ?prdct - product ?pckr - picker ?loc - location)
-    :precondition (and (at ?rbt ?prdct) (at ?pckr ?loc) (at ?rbt ?loc))
-    :effect (and (at ?pckr ?prdct) (not (at ?rbt ?prdct)))
-    )
-
-  (:action pick
-    :parameters (?pckr - picker ?prdct - product)
-    :precondition (at ?pckr ?prdct)
-    :effect (picked ?prdct)
-    )
-
-  ;(:unload
-  ;  :parameters ()
-  ;  :precondition ()
-  ;  :effect ()
+  ;(:action deliver
+  ;  :parameters (?rbt - robot ?prdct - product ?pckr - picker ?loc - location)
+  ;  :precondition (and (at ?shlf ?prdct) (at ?loc ?pckr) (at ?loc ?pckr))
+  ;  :effect (and (at ?pckr ?prdct) (not (at ?rbt ?prdct)))
   ;  )
 
+  (:action pick
+    :parameters (?pckr - picker ?shlf - shelf ?prdct - product ?loc - location ?rbt - robot)
+    :precondition (and (at ?shlf ?prdct) (at ?rbt ?shlf) (at ?loc ?rbt))
+    :effect (and (picked ?prdct) (not (at ?shlf ?prdct)))
+    )
+
+  (:action unload
+    :parameters (?loc - location ?shlf - shelf ?rbt - robot)
+    :precondition (and (at ?rbt ?shlf) (at ?loc ?rbt))
+    :effect (and (not (at ?rbt ?shlf)) (at ?loc ?shlf))
+    )
+
   (:action load
-    :parameters (?rbt - robot  ?prdct - product ?loc - location)
-    :precondition (at ?rbt ?loc)
-    :effect ( and (not (at ?loc ?prdct)) (at ?rbt ?prdct))
+    :parameters (?rbt - robot  ?shlf - shelf ?loc - location)
+    :precondition (and (at ?loc ?rbt) (at ?loc ?shlf))
+    :effect ( and (not (at ?loc ?shlf)) (at ?rbt ?shlf))
     )
 
   ;(:order
