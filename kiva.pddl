@@ -3,7 +3,9 @@
   
   (:requirements :typing)
   
-  (:types robot picker shelf product location )
+  (:types robot shelf product location 
+  picker
+  )
   ;((:constants )
   
   (:predicates
@@ -18,8 +20,8 @@
     )
 
   (:action deliver
-    :parameters (?rbt - robot ?prdct - product ?pckr - picker)
-    :precondition (and (at ?rbt ?prdct) (at ?rbt ?pckr))
+    :parameters (?rbt - robot ?prdct - product ?pckr - picker ?loc - location)
+    :precondition (and (at ?rbt ?prdct) (at ?pckr ?loc) (at ?rbt ?loc))
     :effect (and (at ?pckr ?prdct) (not (at ?rbt ?prdct)))
     )
 
