@@ -1,6 +1,6 @@
 (define (problem pb2)
   (:domain kiva)
-  (:requirements :typing)
+  (:requirements :typing :negative-preconditions)
   (:objects
     pckr - picker
 

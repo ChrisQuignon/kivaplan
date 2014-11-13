@@ -7,7 +7,7 @@
     :typing
     
     ;:fluents ; there is no planing using fluents(?)
-    ;:negative-preconditions
+    :negative-preconditions
     )
   
   (:types
@@ -19,6 +19,8 @@
   (:predicates
     (at ?x ?y)
     ;"Y is at X"
+    ;you might want to use lazy_swap
+    
     (picked ?prdct - product)
     (loaded ?rbt - robot)
     (free ?loc - location)
@@ -44,7 +46,14 @@
 
   (:action load
     :parameters (?rbt - robot  ?shlf - shelf ?loc - shelflocation)
-    :precondition (and (at ?loc ?rbt) (at ?loc ?shlf))
+    :precondition (and (at ?loc ?rbt) (at ?loc ?shlf) (not (loaded ?rbt)))
     :effect ( and (not (at ?loc ?shlf)) (at ?rbt ?shlf) (loaded ?rbt) (free ?loc))
   )
+  
+  ; this is a noop making the (at ?x ?y) predicate ignorant to parameter order
+  ;(:action lazy_swap
+  ;  :parameters (?x ?y)
+  ;  :precondition (at ?x ?y)
+  ;  :effect (and (at ?y ?x) (not (at ?x ?y)))
+  ;)
 )
