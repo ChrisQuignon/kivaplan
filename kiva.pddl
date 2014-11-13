@@ -1,12 +1,19 @@
 (define
   (domain kiva)
   
+  ;amount of prdct
+  
   (:requirements
     :typing
+    
     ;:fluents ; there is no planing using fluents(?)
+    ;:negative-preconditions
     )
   
-  (:types robot shelf product location picker)
+  (:types
+  robot shelf product location picker - object
+  pickerlocation shelflocation - location
+  )
   ;(:constants)
   
   (:predicates
@@ -14,6 +21,7 @@
     ;"Y is at X"
     (picked ?prdct - product)
     (loaded ?rbt - robot)
+    (free ?loc - location)
   )
 
   (:action drive_to
@@ -23,20 +31,20 @@
   )
 
   (:action pick
-    :parameters (?pckr - picker ?shlf - shelf ?prdct - product ?loc - location ?rbt - robot)
+    :parameters (?pckr - picker ?shlf - shelf ?prdct - product ?loc - pickerlocation ?rbt - robot)
     :precondition (and (at ?shlf ?prdct) (at ?rbt ?shlf) (at ?loc ?rbt) (at ?loc ?pckr))
     :effect (and (picked ?prdct) (not (at ?shlf ?prdct)))
   )
 
   (:action unload
-    :parameters (?loc - location ?shlf - shelf ?rbt - robot)
-    :precondition (and (at ?rbt ?shlf) (at ?loc ?rbt) (loaded ?rbt))
-    :effect (and (not (at ?rbt ?shlf)) (at ?loc ?shlf) (not (loaded ?rbt)))
+    :parameters (?loc - shelflocation ?shlf - shelf ?rbt - robot)
+    :precondition (and (at ?rbt ?shlf) (at ?loc ?rbt) (loaded ?rbt) (free ?loc))
+    :effect (and (not (at ?rbt ?shlf)) (at ?loc ?shlf) (not (loaded ?rbt)) (not (free ?loc)))
   )
 
   (:action load
-    :parameters (?rbt - robot  ?shlf - shelf ?loc - location)
-    :precondition (and (at ?loc ?rbt) (at ?loc ?shlf) (not (loaded ?rbt)))
-    :effect ( and (not (at ?loc ?shlf)) (at ?rbt ?shlf) (loaded ?rbt))
+    :parameters (?rbt - robot  ?shlf - shelf ?loc - shelflocation)
+    :precondition (and (at ?loc ?rbt) (at ?loc ?shlf))
+    :effect ( and (not (at ?loc ?shlf)) (at ?rbt ?shlf) (loaded ?rbt) (free ?loc))
   )
 )
