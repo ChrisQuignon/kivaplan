@@ -1,26 +1,26 @@
 (define
   (domain kiva)
-  
+
   ;amount of prdct
-  
+
   (:requirements
     :typing
-    
+
     ;:fluents ; there is no planing using fluents(?)
     :negative-preconditions
     )
-  
+
   (:types
   robot shelf product location picker - object
   pickerlocation shelflocation - location
   )
   ;(:constants)
-  
+
   (:predicates
     (at ?x ?y)
     ;"Y is at X"
     ;you might want to use lazy_swap
-    
+
     (picked ?prdct - product)
     (loaded ?rbt - robot)
     (free ?loc - location)
@@ -49,7 +49,7 @@
     :precondition (and (at ?loc ?rbt) (at ?loc ?shlf) (not (loaded ?rbt)))
     :effect ( and (not (at ?loc ?shlf)) (at ?rbt ?shlf) (loaded ?rbt) (free ?loc))
   )
-  
+
   ; this is a noop making the (at ?x ?y) predicate ignorant to parameter order
   ;(:action lazy_swap
   ;  :parameters (?x ?y)
